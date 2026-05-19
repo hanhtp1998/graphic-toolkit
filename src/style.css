@@ -237,3 +237,23 @@ input[type=checkbox] { accent-color: var(--terracotta); width: 16px; height: 16p
 .deco-rule { display: flex; align-items: center; gap: 10px; margin: 6px 0 16px; }
 .deco-rule::before, .deco-rule::after { content:''; flex:1; height:1px; background: var(--gold); }
 .deco-rule span { font-family:'Press Start 2P'; font-size:0.56rem; color:var(--gold); white-space:nowrap; }
+
+/* App icon in main hub header */
+.header-app-icon { width: 40px; height: 40px; image-rendering: pixelated; flex-shrink: 0; }
+
+/* Back navigation bar (tool pages → hub) */
+.back-bar {
+  background: var(--dark);
+  border-bottom: 2px solid var(--gold);
+  padding: 8px 28px;
+}
+.back-link {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: var(--gold);
+  text-decoration: none;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.back-link:hover { opacity: 1; }
