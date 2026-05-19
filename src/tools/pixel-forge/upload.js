@@ -5,6 +5,13 @@ export class UploadManager {
     this.files = [];
     this.activeIdx = 0;
     this.onFilesChanged = null;
+    // Mirrors the current slider values so addFiles always processes at the active grid size
+    this.currentSettings = {
+      gridSize: 16,
+      contrast: 0,
+      maxColors: 8,
+      bgTolerance: 40
+    };
   }
 
   setupUI(dropZoneEl, fileInputEl, fileListEl, errorEl) {
@@ -35,7 +42,7 @@ export class UploadManager {
     this.errorEl.textContent = '';
     newFiles.forEach(file => {
       if (!file.type.startsWith('image/')) {
-        this.errorEl.textContent = `ERR: "${file.name}" NOT SUPPORTED`;
+        this.errorEl.textContent = 'ERR: "' + file.name + '" NOT SUPPORTED';
         return;
       }
       if (this.files.find(f => f.name === file.name && f.size === file.size)) return;
@@ -54,7 +61,8 @@ export class UploadManager {
       const reader = new FileReader();
       reader.onload = (e) => {
         fileObj.dataUrl = e.target.result;
-        this.processFile(idx);
+        // Use the active settings so pixelData gridSize matches previewManager.gridSize
+        this.processFile(idx, { ...this.currentSettings });
       };
       reader.onerror = () => {
         fileObj.status = 'err';
@@ -70,22 +78,32 @@ export class UploadManager {
     const gridSize = settings.gridSize || 16;
     const contrast = settings.contrast || 0;
     const maxColors = settings.maxColors || 8;
-    const bgTolerance = settings.bgTolerance || 40;
+    const bgTolerance = settings.bgTolerance != null ? settings.bgTolerance : 40;
+
+    // Tag each call so stale results from a superseded gridSize are discarded
+    const token = Symbol();
+    fileObj._processToken = token;
 
     try {
       const result = await processImage(fileObj.dataUrl, gridSize, contrast, maxColors, bgTolerance);
+
+      // Discard if a newer processFile call superseded this one
+      if (fileObj._processToken !== token) return;
+
       fileObj.pixelData = result.pixelData;
       fileObj.thumbnail = result.thumbnail;
       fileObj.status = 'ok';
       this.render();
       if (this.onFilesChanged) this.onFilesChanged();
     } catch (e) {
+      if (fileObj._processToken !== token) return;
       fileObj.status = 'err';
       this.render();
     }
   }
 
   reprocessAll(settings) {
+    this.currentSettings = { ...settings };
     this.files.forEach((f, i) => {
       if (f.dataUrl) {
         f.status = 'pending';
@@ -100,17 +118,17 @@ export class UploadManager {
       return;
     }
 
-    this.fileListEl.innerHTML = this.files.map((f, i) => `
-      <div class="file-item${i === this.activeIdx ? ' active' : ''}" data-idx="${i}">
-        ${f.thumbnail ? `<img class="file-thumb" src="${f.thumbnail}">` : `<div class="file-thumb-empty"></div>`}
-        <div class="file-info">
-          <div class="fname">${f.name}</div>
-          <div class="fmeta">${f.size ? (f.size / 1024).toFixed(1) + ' KB' : ''}</div>
-        </div>
-        <span class="file-status ${f.status}">${f.status === 'ok' ? 'READY' : f.status === 'err' ? 'ERR' : '...'}</span>
-        <button class="file-remove" data-remove="${i}">DEL</button>
-      </div>
-    `).join('');
+    this.fileListEl.innerHTML = this.files.map((f, i) =>
+      '<div class="file-item' + (i === this.activeIdx ? ' active' : '') + '" data-idx="' + i + '">' +
+        (f.thumbnail ? '<img class="file-thumb" src="' + f.thumbnail + '">' : '<div class="file-thumb-empty"></div>') +
+        '<div class="file-info">' +
+          '<div class="fname">' + f.name + '</div>' +
+          '<div class="fmeta">' + (f.size ? (f.size / 1024).toFixed(1) + ' KB' : '') + '</div>' +
+        '</div>' +
+        '<span class="file-status ' + f.status + '">' + (f.status === 'ok' ? 'READY' : f.status === 'err' ? 'ERR' : '...') + '</span>' +
+        '<button class="file-remove" data-remove="' + i + '">DEL</button>' +
+      '</div>'
+    ).join('');
 
     this.fileListEl.querySelectorAll('.file-item').forEach(el => {
       el.addEventListener('click', (e) => {

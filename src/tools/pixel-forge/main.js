@@ -38,7 +38,7 @@ exportManager.setupUI(document.getElementById('statusMsg'));
 // Setup sizes
 const sizesGrid = document.getElementById('sizesGrid');
 sizesGrid.innerHTML = SIZES.map(s =>
-  `<button class="size-btn${selectedSizes.has(s) ? ' active' : ''}" data-size="${s}">${s}px</button>`
+  '<button class="size-btn' + (selectedSizes.has(s) ? ' active' : '') + '" data-size="' + s + '">' + s + 'px</button>'
 ).join('');
 
 sizesGrid.addEventListener('click', (e) => {
@@ -66,38 +66,58 @@ const updateValue = (displayEl, input) => {
   displayEl.textContent = input.value;
 };
 
+// Sync uploadManager settings so new uploads always use the current slider values
+function syncSettings() {
+  uploadManager.currentSettings = {
+    gridSize: parseInt(gridSlider.value),
+    contrast: parseInt(contrastSlider.value),
+    maxColors: parseInt(maxColorsSlider.value),
+    bgTolerance: parseInt(bgToleranceSlider.value)
+  };
+}
+
+// Initialize from HTML defaults on load
+syncSettings();
+
 gridSlider.addEventListener('input', (e) => {
   updateValue(document.getElementById('gridVal'), e.target);
   document.getElementById('gridVal2').textContent = e.target.value;
   previewManager.gridSize = parseInt(e.target.value);
+  syncSettings();
   reprocessAll();
 });
 
 contrastSlider.addEventListener('input', (e) => {
   updateValue(document.getElementById('contrastVal'), e.target);
+  syncSettings();
   reprocessAll();
 });
 
 maxColorsSlider.addEventListener('input', (e) => {
   updateValue(document.getElementById('maxColorsVal'), e.target);
+  syncSettings();
   reprocessAll();
 });
 
 bgToleranceSlider.addEventListener('input', (e) => {
   updateValue(document.getElementById('bgToleranceVal'), e.target);
+  syncSettings();
   reprocessAll();
 });
 
 outlineThicknessSlider.addEventListener('input', (e) => {
   updateValue(document.getElementById('thickVal'), e.target);
+  previewManager.outlineThickness = parseInt(e.target.value);
   previewManager.render(uploadManager.getActiveFile(), uploadManager.files);
 });
 
 outlineCheckbox.addEventListener('change', () => {
+  previewManager.outlineEnabled = outlineCheckbox.checked;
   previewManager.render(uploadManager.getActiveFile(), uploadManager.files);
 });
 
 outlineColorPicker.addEventListener('input', () => {
+  previewManager.outlineColor = outlineColorPicker.value;
   previewManager.render(uploadManager.getActiveFile(), uploadManager.files);
 });
 
@@ -108,9 +128,7 @@ function reprocessAll() {
     maxColors: parseInt(maxColorsSlider.value),
     bgTolerance: parseInt(bgToleranceSlider.value)
   });
-  setTimeout(() => {
-    previewManager.render(uploadManager.getActiveFile(), uploadManager.files);
-  }, 100);
+  // onFilesChanged drives the render after reprocessing completes — no setTimeout needed
 }
 
 function updateDownloadBtn() {
