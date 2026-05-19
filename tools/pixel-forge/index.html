@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIXEL FORGE</title>
+</head>
+<body>
+
+<!-- Header -->
+<div class="site-header">
+  <div>
+    <div class="logo">PIXEL FORGE</div>
+    <div class="tagline" style="margin-top:4px;">SVG ICON GENERATOR · v1.0</div>
+  </div>
+  <div class="header-dots">
+    <span class="dot-r"></span><span class="dot-g"></span><span class="dot-b"></span>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section-eyebrow">ELEMENTOS GRÁFICOS</div>
+  <div class="section-divider"></div>
+
+  <!-- Step 1 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="step-badge">01</span>
+      LOAD SPRITES
+      <span class="blink">▌</span>
+    </div>
+    <div class="card-body">
+      <div class="upload-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/svg+xml" multiple>
+        <span class="upload-icon">🖼</span>
+        <div class="uz-title">[ CLICK TO INSERT COIN ]</div>
+        <div class="uz-sub">or drag & drop · PNG · JPG · GIF · WEBP · SVG</div>
+      </div>
+      <div class="file-list" id="fileList"></div>
+      <div class="error" id="uploadError"></div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="card">
+    <div class="card-header"><span class="step-badge">02</span> CONFIGURE</div>
+    <div class="card-body">
+
+      <div class="deco-rule"><span>PIXEL GRID</span></div>
+      <div class="ctrl-row">
+        <span class="ctrl-label">GRID SIZE</span>
+        <div class="px-slider-wrap">
+          <input type="range" id="gridSlider" min="4" max="64" value="16" step="1">
+          <div class="val-box"><span id="gridVal">16</span>×<span id="gridVal2">16</span></div>
+        </div>
+      </div>
+
+      <div class="deco-rule"><span>IMAGE ADJUSTMENTS</span></div>
+      <div class="ctrl-row">
+        <span class="ctrl-label">CONTRAST</span>
+        <div class="px-slider-wrap">
+          <input type="range" id="contrastSlider" min="-100" max="100" value="0" step="1">
+          <div class="val-box"><span id="contrastVal">0</span></div>
+        </div>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-label">MAX COLOR</span>
+        <div class="px-slider-wrap">
+          <input type="range" id="maxColors" min="2" max="32" value="8" step="1">
+          <div class="val-box"><span id="maxColorsVal">8</span></div>
+        </div>
+      </div>
+      <div class="ctrl-row">
+        <span class="ctrl-label">BG REMOVE</span>
+        <div class="px-slider-wrap">
+          <input type="range" id="bgTolerance" min="0" max="120" value="40" step="1">
+          <div class="val-box"><span id="bgToleranceVal">40</span></div>
+        </div>
+      </div>
+
+      <div class="deco-rule"><span>OUTLINE</span></div>
+      <div class="opt-row">
+        <input type="checkbox" id="outlineEnabled" checked>
+        <span class="opt-label">ENABLE</span>
+        <div class="swatch-wrap" title="Outline color"><input type="color" id="outlineColor" value="#1a1612"></div>
+        <span class="opt-label" style="margin-left:8px;">THICKNESS</span>
+        <div class="px-slider-wrap" style="min-width:100px;max-width:160px;">
+          <input type="range" id="outlineThickness" min="1" max="3" value="1" step="1">
+          <div class="val-box"><span id="thickVal">1</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="card">
+    <div class="card-header"><span class="step-badge">03</span> PREVIEW SCREEN</div>
+    <div class="preview-tabs" id="previewTabs"></div>
+    <div class="card-body">
+      <div class="preview-area">
+        <div id="previewSvg">
+          <span class="empty-state">NO SIGNAL<br>──────────<br>LOAD IMAGE<br>TO START</span>
+        </div>
+        <div id="paletteDisplay"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="card">
+    <div class="card-header"><span class="step-badge">04</span> OUTPUT SIZES</div>
+    <div class="card-body">
+      <div class="sizes-wrap" id="sizesGrid"></div>
+      <p class="info-text">⊟ EACH SELECTED SIZE × EACH IMAGE = 1 SVG · ALL PACKED IN ONE ZIP</p>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- Sticky bottom bar -->
+<div class="bottom-bar">
+  <button class="btn btn-primary" id="downloadBtn" disabled>▶ EXPORT ZIP</button>
+  <button class="btn btn-secondary" id="clearBtn">⟲ RESET</button>
+  <span id="statusMsg"></span>
+</div>
+
+<script type="module" src="../../src/tools/pixel-forge/main.js"></script>
+</body>
+</html>
