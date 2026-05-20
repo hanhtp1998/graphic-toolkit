@@ -17,7 +17,7 @@
 <div class="site-header">
   <div>
     <div class="logo">PIXEL FORGE</div>
-    <div class="tagline" style="margin-top:4px;">SVG ICON GENERATOR · v1.0</div>
+    <div class="tagline" style="margin-top:4px;">SVG IMAGE EFFECTS · v2.0</div>
   </div>
   <div class="header-dots">
     <span class="dot-r"></span><span class="dot-g"></span><span class="dot-b"></span>
@@ -48,66 +48,121 @@
     </div>
   </div>
 
-  <!-- Step 2 -->
+  <!-- Step 2: Choose Effect -->
   <div class="card">
-    <div class="card-header"><span class="step-badge">02</span> CONFIGURE</div>
+    <div class="card-header"><span class="step-badge">02</span> CHOOSE EFFECT</div>
+    <div class="card-body">
+      <div class="effect-grid" id="effectGrid">
+        <button class="effect-btn active" data-effect="pixel-art">
+          <span class="effect-icon">▦</span>
+          <span class="effect-name">PIXEL ART</span>
+        </button>
+        <button class="effect-btn" data-effect="halftone">
+          <span class="effect-icon">◉</span>
+          <span class="effect-name">HALFTONE</span>
+        </button>
+        <button class="effect-btn" data-effect="pointillism">
+          <span class="effect-icon">⁘</span>
+          <span class="effect-name">POINTILLISM</span>
+        </button>
+        <button class="effect-btn" data-effect="ascii">
+          <span class="effect-icon">A_</span>
+          <span class="effect-name">ASCII ART</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Configure -->
+  <div class="card">
+    <div class="card-header"><span class="step-badge">03</span> CONFIGURE</div>
     <div class="card-body">
 
-      <div class="deco-rule"><span>PIXEL GRID</span></div>
-      <div class="ctrl-row">
-        <span class="ctrl-label">GRID SIZE</span>
-        <div class="px-slider-wrap">
-          <input type="range" id="gridSlider" min="4" max="64" value="16" step="1">
-          <div class="val-box"><span id="gridVal">16</span>×<span id="gridVal2">16</span></div>
+      <!-- Pixel Art config -->
+      <div id="cfg-pixel-art">
+        <div class="deco-rule"><span>PIXEL GRID</span></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">GRID SIZE</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="gridSlider" min="4" max="64" value="16" step="1">
+            <div class="val-box"><span id="gridVal">16</span>×<span id="gridVal2">16</span></div>
+          </div>
+        </div>
+
+        <div class="opt-row">
+          <input type="checkbox" id="squareMode">
+          <span class="opt-label">SQUARE MODE <span style="font-family:monospace;font-size:0.7em;opacity:0.6;">(default: preserve ratio)</span></span>
+        </div>
+
+        <div class="deco-rule"><span>IMAGE ADJUSTMENTS</span></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">CONTRAST</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="contrastSlider" min="-100" max="100" value="0" step="1">
+            <div class="val-box"><span id="contrastVal">0</span></div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">MAX COLOR</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="maxColors" min="2" max="32" value="8" step="1">
+            <div class="val-box"><span id="maxColorsVal">8</span></div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">BG REMOVE</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="bgTolerance" min="0" max="120" value="40" step="1">
+            <div class="val-box"><span id="bgToleranceVal">40</span></div>
+          </div>
+        </div>
+
+        <div class="deco-rule"><span>OUTLINE</span></div>
+        <div class="opt-row">
+          <input type="checkbox" id="outlineEnabled" checked>
+          <span class="opt-label">ENABLE</span>
+          <div class="swatch-wrap" title="Outline color"><input type="color" id="outlineColor" value="#1a1612"></div>
+          <span class="opt-label" style="margin-left:8px;">THICKNESS</span>
+          <div class="px-slider-wrap" style="min-width:100px;max-width:160px;">
+            <input type="range" id="outlineThickness" min="1" max="3" value="1" step="1">
+            <div class="val-box"><span id="thickVal">1</span></div>
+          </div>
         </div>
       </div>
 
-      <div class="opt-row">
-        <input type="checkbox" id="squareMode">
-        <span class="opt-label">SQUARE MODE <span style="font-family:monospace;font-size:0.7em;opacity:0.6;">(default: preserve ratio)</span></span>
-      </div>
-
-      <div class="deco-rule"><span>IMAGE ADJUSTMENTS</span></div>
-      <div class="ctrl-row">
-        <span class="ctrl-label">CONTRAST</span>
-        <div class="px-slider-wrap">
-          <input type="range" id="contrastSlider" min="-100" max="100" value="0" step="1">
-          <div class="val-box"><span id="contrastVal">0</span></div>
-        </div>
-      </div>
-      <div class="ctrl-row">
-        <span class="ctrl-label">MAX COLOR</span>
-        <div class="px-slider-wrap">
-          <input type="range" id="maxColors" min="2" max="32" value="8" step="1">
-          <div class="val-box"><span id="maxColorsVal">8</span></div>
-        </div>
-      </div>
-      <div class="ctrl-row">
-        <span class="ctrl-label">BG REMOVE</span>
-        <div class="px-slider-wrap">
-          <input type="range" id="bgTolerance" min="0" max="120" value="40" step="1">
-          <div class="val-box"><span id="bgToleranceVal">40</span></div>
+      <!-- Halftone config (coming soon) -->
+      <div id="cfg-halftone" style="display:none;">
+        <div class="effect-coming-soon">
+          <span class="ecs-icon">◉</span>
+          <div class="ecs-title">HALFTONE</div>
+          <div class="ecs-sub">COMING IN v2.0 · ISSUE #7</div>
         </div>
       </div>
 
-      <div class="deco-rule"><span>OUTLINE</span></div>
-      <div class="opt-row">
-        <input type="checkbox" id="outlineEnabled" checked>
-        <span class="opt-label">ENABLE</span>
-        <div class="swatch-wrap" title="Outline color"><input type="color" id="outlineColor" value="#1a1612"></div>
-        <span class="opt-label" style="margin-left:8px;">THICKNESS</span>
-        <div class="px-slider-wrap" style="min-width:100px;max-width:160px;">
-          <input type="range" id="outlineThickness" min="1" max="3" value="1" step="1">
-          <div class="val-box"><span id="thickVal">1</span></div>
+      <!-- Pointillism config (coming soon) -->
+      <div id="cfg-pointillism" style="display:none;">
+        <div class="effect-coming-soon">
+          <span class="ecs-icon">⁘</span>
+          <div class="ecs-title">POINTILLISM</div>
+          <div class="ecs-sub">COMING IN v2.0 · ISSUE #8</div>
+        </div>
+      </div>
+
+      <!-- ASCII config (coming soon) -->
+      <div id="cfg-ascii" style="display:none;">
+        <div class="effect-coming-soon">
+          <span class="ecs-icon">A_</span>
+          <div class="ecs-title">ASCII ART</div>
+          <div class="ecs-sub">COMING IN v2.0 · ISSUE #9</div>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Step 3 -->
+  <!-- Step 4 -->
   <div class="card">
-    <div class="card-header"><span class="step-badge">03</span> PREVIEW SCREEN</div>
+    <div class="card-header"><span class="step-badge">04</span> PREVIEW SCREEN</div>
     <div class="preview-tabs" id="previewTabs"></div>
     <div class="card-body">
       <div class="preview-area">
@@ -119,9 +174,9 @@
     </div>
   </div>
 
-  <!-- Step 4 -->
+  <!-- Step 5 -->
   <div class="card">
-    <div class="card-header"><span class="step-badge">04</span> OUTPUT SIZES</div>
+    <div class="card-header"><span class="step-badge">05</span> OUTPUT SIZES</div>
     <div class="card-body">
       <div class="sizes-wrap" id="sizesGrid"></div>
       <p class="info-text" id="sizeInfoText">⊟ SIZE = LONGEST EDGE · RATIO PRESERVED · EACH IMAGE = 1 SVG · ALL IN 1 ZIP</p>

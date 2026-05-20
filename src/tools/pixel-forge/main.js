@@ -6,6 +6,7 @@ import { ExportManager } from './exporter.js';
 const SIZES = [16, 24, 32, 48, 64, 96, 128, 256, 512];
 let selectedSizes = new Set([32, 64, 128]);
 let squareMode = false;
+let activeEffect = 'pixel-art';
 
 const uploadManager = new UploadManager();
 const previewManager = new PreviewManager();
@@ -142,6 +143,29 @@ function reprocessAll() {
   });
   // onFilesChanged drives the render after reprocessing completes — no setTimeout needed
 }
+
+// Effect switcher
+function switchEffect(effect) {
+  activeEffect = effect;
+  document.querySelectorAll('.effect-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.effect === effect)
+  );
+  document.querySelectorAll('[id^="cfg-"]').forEach(el => {
+    el.style.display = el.id === `cfg-${effect}` ? '' : 'none';
+  });
+  if (effect === 'pixel-art') {
+    reprocessAll();
+  } else {
+    previewManager.clear();
+    document.getElementById('downloadBtn').disabled = true;
+  }
+}
+
+document.getElementById('effectGrid').addEventListener('click', (e) => {
+  const btn = e.target.closest('.effect-btn');
+  if (!btn) return;
+  switchEffect(btn.dataset.effect);
+});
 
 function updateSizeInfo() {
   const el = document.getElementById('sizeInfoText');
