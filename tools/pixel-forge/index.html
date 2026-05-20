@@ -130,30 +130,80 @@
         </div>
       </div>
 
-      <!-- Halftone config (coming soon) -->
+      <!-- Halftone config -->
       <div id="cfg-halftone" style="display:none;">
-        <div class="effect-coming-soon">
-          <span class="ecs-icon">◉</span>
-          <div class="ecs-title">HALFTONE</div>
-          <div class="ecs-sub">COMING IN v2.0 · ISSUE #7</div>
+        <div class="deco-rule"><span>HALFTONE</span></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">GRID SIZE</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="htGridSlider" min="4" max="64" value="16" step="1">
+            <div class="val-box"><span id="htGridVal">16</span>px</div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">DOT SCALE</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="htDotScale" min="40" max="120" value="90" step="5">
+            <div class="val-box"><span id="htDotScaleVal">90</span>%</div>
+          </div>
+        </div>
+        <div class="opt-row">
+          <input type="checkbox" id="htBgWhite" checked>
+          <span class="opt-label">WHITE BACKGROUND</span>
         </div>
       </div>
 
-      <!-- Pointillism config (coming soon) -->
+      <!-- Pointillism config -->
       <div id="cfg-pointillism" style="display:none;">
-        <div class="effect-coming-soon">
-          <span class="ecs-icon">⁘</span>
-          <div class="ecs-title">POINTILLISM</div>
-          <div class="ecs-sub">COMING IN v2.0 · ISSUE #8</div>
+        <div class="deco-rule"><span>POINTILLISM</span></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">GRID SIZE</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="ptGridSlider" min="4" max="64" value="16" step="1">
+            <div class="val-box"><span id="ptGridVal">16</span>px</div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">MIN RADIUS</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="ptMinR" min="5" max="50" value="20" step="5">
+            <div class="val-box"><span id="ptMinRVal">20</span>%</div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">MAX RADIUS</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="ptMaxR" min="50" max="120" value="90" step="5">
+            <div class="val-box"><span id="ptMaxRVal">90</span>%</div>
+          </div>
+        </div>
+        <div class="opt-row">
+          <input type="checkbox" id="ptBgWhite" checked>
+          <span class="opt-label">WHITE BACKGROUND</span>
         </div>
       </div>
 
-      <!-- ASCII config (coming soon) -->
+      <!-- ASCII config -->
       <div id="cfg-ascii" style="display:none;">
-        <div class="effect-coming-soon">
-          <span class="ecs-icon">A_</span>
-          <div class="ecs-title">ASCII ART</div>
-          <div class="ecs-sub">COMING IN v2.0 · ISSUE #9</div>
+        <div class="deco-rule"><span>ASCII ART</span></div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">GRID SIZE</span>
+          <div class="px-slider-wrap">
+            <input type="range" id="acGridSlider" min="4" max="64" value="32" step="1">
+            <div class="val-box"><span id="acGridVal">32</span>px</div>
+          </div>
+        </div>
+        <div class="ctrl-row">
+          <span class="ctrl-label">CHAR RAMP</span>
+          <div class="sizes-wrap" id="rampBtns">
+            <button class="size-btn active" data-ramp="balanced">BALANCED</button>
+            <button class="size-btn" data-ramp="dense">DENSE</button>
+            <button class="size-btn" data-ramp="minimal">MINIMAL</button>
+          </div>
+        </div>
+        <div class="opt-row">
+          <input type="checkbox" id="acColorMode">
+          <span class="opt-label">COLOR MODE <span style="font-family:monospace;font-size:0.7em;opacity:0.6;">(default: monochrome)</span></span>
         </div>
       </div>
 
