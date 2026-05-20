@@ -41,6 +41,13 @@ previewManager.setupUI(
 
 exportManager.setupUI(document.getElementById('statusMsg'));
 
+previewManager.onTabClick = (idx) => {
+  uploadManager.activeIdx = idx;
+  uploadManager.render();
+  previewManager.activeIdx = idx;
+  previewManager.render(uploadManager.getActiveFile(), uploadManager.files);
+};
+
 const sizesGrid = document.getElementById('sizesGrid');
 sizesGrid.innerHTML = SIZES.map(s =>
   '<button class="size-btn' + (selectedSizes.has(s) ? ' active' : '') + '" data-size="' + s + '">' + s + 'px</button>'

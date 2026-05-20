@@ -15,12 +15,19 @@ export class PreviewManager {
     this.outlineThickness = 1;
     this.activeEffect = 'pixel-art';
     this.effectSettings = {};
+    this.onTabClick = null;
   }
 
   setupUI(previewEl, paletteEl, tabsEl) {
     this.previewEl = previewEl;
     this.paletteEl = paletteEl;
     this.tabsEl = tabsEl;
+
+    tabsEl.addEventListener('click', (e) => {
+      const tab = e.target.closest('.ptab');
+      if (!tab || !this.onTabClick) return;
+      this.onTabClick(parseInt(tab.dataset.idx));
+    });
   }
 
   buildSVGForEffect(file, outputSize) {
