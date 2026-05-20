@@ -62,9 +62,9 @@ npm run preview # preview production build
 - No comments except WHY (not WHAT)
 
 ## References
-- Session notes: `../graphic-toolkit-session.md`
-- PRD: `/Users/phuonghanhtran/Downloads/pixel-forge-prd.md`
-- Original artifact: `/Users/phuonghanhtran/Downloads/pixel-svg-generator.html`
+- PRD: `docs/PRD.md`
+- Session logs: `../../../_logs/LOG_YYYY-MM-DD.md`
+- Extraction notes: `docs/EXTRACTION_SUMMARY.md`
 
 ---
 **Last Updated:** 2026-05-19

@@ -5,6 +5,7 @@ import { ExportManager } from './exporter.js';
 
 const SIZES = [16, 24, 32, 48, 64, 96, 128, 256, 512];
 let selectedSizes = new Set([32, 64, 128]);
+let squareMode = false;
 
 const uploadManager = new UploadManager();
 const previewManager = new PreviewManager();
@@ -58,6 +59,15 @@ const gridSlider = document.getElementById('gridSlider');
 const contrastSlider = document.getElementById('contrastSlider');
 const maxColorsSlider = document.getElementById('maxColors');
 const bgToleranceSlider = document.getElementById('bgTolerance');
+const squareModeCheckbox = document.getElementById('squareMode');
+
+squareModeCheckbox.addEventListener('change', () => {
+  squareMode = squareModeCheckbox.checked;
+  syncSettings();
+  updateSizeInfo();
+  reprocessAll();
+});
+
 const outlineCheckbox = document.getElementById('outlineEnabled');
 const outlineColorPicker = document.getElementById('outlineColor');
 const outlineThicknessSlider = document.getElementById('outlineThickness');
@@ -72,7 +82,8 @@ function syncSettings() {
     gridSize: parseInt(gridSlider.value),
     contrast: parseInt(contrastSlider.value),
     maxColors: parseInt(maxColorsSlider.value),
-    bgTolerance: parseInt(bgToleranceSlider.value)
+    bgTolerance: parseInt(bgToleranceSlider.value),
+    squareMode
   };
 }
 
@@ -126,15 +137,26 @@ function reprocessAll() {
     gridSize: parseInt(gridSlider.value),
     contrast: parseInt(contrastSlider.value),
     maxColors: parseInt(maxColorsSlider.value),
-    bgTolerance: parseInt(bgToleranceSlider.value)
+    bgTolerance: parseInt(bgToleranceSlider.value),
+    squareMode
   });
   // onFilesChanged drives the render after reprocessing completes — no setTimeout needed
+}
+
+function updateSizeInfo() {
+  const el = document.getElementById('sizeInfoText');
+  if (!el) return;
+  el.textContent = squareMode
+    ? '⊟ EACH SIZE = SQUARE OUTPUT · EACH IMAGE = 1 SVG · ALL IN 1 ZIP'
+    : '⊟ SIZE = LONGEST EDGE · RATIO PRESERVED · EACH IMAGE = 1 SVG · ALL IN 1 ZIP';
 }
 
 function updateDownloadBtn() {
   const hasReady = uploadManager.getReadyFiles().length > 0;
   document.getElementById('downloadBtn').disabled = !hasReady;
 }
+
+updateSizeInfo();
 
 document.getElementById('downloadBtn').addEventListener('click', async () => {
   previewManager.outlineEnabled = outlineCheckbox.checked;

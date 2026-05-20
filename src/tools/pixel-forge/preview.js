@@ -33,7 +33,8 @@ export class PreviewManager {
 
     const svgContent = buildSVG(
       activeFile.pixelData,
-      this.gridSize,
+      activeFile.gridW,
+      activeFile.gridH,
       220,
       this.outlineEnabled,
       this.outlineColor,

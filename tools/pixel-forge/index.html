@@ -62,6 +62,11 @@
         </div>
       </div>
 
+      <div class="opt-row">
+        <input type="checkbox" id="squareMode">
+        <span class="opt-label">SQUARE MODE <span style="font-family:monospace;font-size:0.7em;opacity:0.6;">(default: preserve ratio)</span></span>
+      </div>
+
       <div class="deco-rule"><span>IMAGE ADJUSTMENTS</span></div>
       <div class="ctrl-row">
         <span class="ctrl-label">CONTRAST</span>
@@ -119,7 +124,7 @@
     <div class="card-header"><span class="step-badge">04</span> OUTPUT SIZES</div>
     <div class="card-body">
       <div class="sizes-wrap" id="sizesGrid"></div>
-      <p class="info-text">⊟ EACH SELECTED SIZE × EACH IMAGE = 1 SVG · ALL PACKED IN ONE ZIP</p>
+      <p class="info-text" id="sizeInfoText">⊟ SIZE = LONGEST EDGE · RATIO PRESERVED · EACH IMAGE = 1 SVG · ALL IN 1 ZIP</p>
     </div>
   </div>
 

@@ -10,7 +10,8 @@ export class UploadManager {
       gridSize: 16,
       contrast: 0,
       maxColors: 8,
-      bgTolerance: 40
+      bgTolerance: 40,
+      squareMode: false
     };
   }
 
@@ -53,6 +54,8 @@ export class UploadManager {
         dataUrl: null,
         pixelData: null,
         thumbnail: null,
+        gridW: null,
+        gridH: null,
         status: 'pending'
       };
       this.files.push(fileObj);
@@ -79,19 +82,22 @@ export class UploadManager {
     const contrast = settings.contrast || 0;
     const maxColors = settings.maxColors || 8;
     const bgTolerance = settings.bgTolerance != null ? settings.bgTolerance : 40;
+    const squareMode = settings.squareMode || false;
 
     // Tag each call so stale results from a superseded gridSize are discarded
     const token = Symbol();
     fileObj._processToken = token;
 
     try {
-      const result = await processImage(fileObj.dataUrl, gridSize, contrast, maxColors, bgTolerance);
+      const result = await processImage(fileObj.dataUrl, gridSize, contrast, maxColors, bgTolerance, squareMode);
 
       // Discard if a newer processFile call superseded this one
       if (fileObj._processToken !== token) return;
 
       fileObj.pixelData = result.pixelData;
       fileObj.thumbnail = result.thumbnail;
+      fileObj.gridW = result.gridW;
+      fileObj.gridH = result.gridH;
       fileObj.status = 'ok';
       this.render();
       if (this.onFilesChanged) this.onFilesChanged();

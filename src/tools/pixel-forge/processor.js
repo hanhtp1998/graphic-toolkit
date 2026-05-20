@@ -51,10 +51,14 @@ export function quantizeColors(pixels, maxColors) {
   });
 }
 
-export function removeBackground(pixels, gridSize, tolerance) {
+export function removeBackground(pixels, gridW, gridH, tolerance) {
   if (tolerance === 0) return pixels;
-  const n = gridSize;
-  const corners = [pixels[0], pixels[n - 1], pixels[(n - 1) * n], pixels[n * n - 1]];
+  const corners = [
+    pixels[0],
+    pixels[gridW - 1],
+    pixels[(gridH - 1) * gridW],
+    pixels[gridH * gridW - 1]
+  ];
   let br = 0, bg = 0, bb = 0, count = 0;
 
   corners.forEach(p => {
@@ -71,20 +75,35 @@ export function removeBackground(pixels, gridSize, tolerance) {
   );
 }
 
-export function processImage(imageDataUrl, gridSize, contrast, maxColors, bgTolerance) {
+export function processImage(imageDataUrl, gridSize, contrast, maxColors, bgTolerance, squareMode = false) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
+      let gridW, gridH;
+      if (squareMode) {
+        gridW = gridSize;
+        gridH = gridSize;
+      } else {
+        const aspect = img.naturalWidth / img.naturalHeight;
+        if (aspect >= 1) {
+          gridW = gridSize;
+          gridH = Math.max(1, Math.round(gridSize / aspect));
+        } else {
+          gridH = gridSize;
+          gridW = Math.max(1, Math.round(gridSize * aspect));
+        }
+      }
+
       const canvas = document.createElement('canvas');
-      canvas.width = gridSize;
-      canvas.height = gridSize;
+      canvas.width = gridW;
+      canvas.height = gridH;
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, gridSize, gridSize);
+      ctx.drawImage(img, 0, 0, gridW, gridH);
 
       try {
-        const imgData = ctx.getImageData(0, 0, gridSize, gridSize).data;
+        const imgData = ctx.getImageData(0, 0, gridW, gridH).data;
         let pixels = [];
-        for (let i = 0; i < gridSize * gridSize; i++) {
+        for (let i = 0; i < gridW * gridH; i++) {
           pixels.push({
             r: imgData[i * 4],
             g: imgData[i * 4 + 1],
@@ -95,7 +114,7 @@ export function processImage(imageDataUrl, gridSize, contrast, maxColors, bgTole
 
         pixels = applyContrast(pixels, contrast);
         pixels = quantizeColors(pixels, maxColors);
-        pixels = removeBackground(pixels, gridSize, bgTolerance);
+        pixels = removeBackground(pixels, gridW, gridH, bgTolerance);
 
         // Generate 36x36 thumbnail
         canvas.width = 36;
@@ -103,7 +122,7 @@ export function processImage(imageDataUrl, gridSize, contrast, maxColors, bgTole
         ctx.drawImage(img, 0, 0, 36, 36);
         const thumbnail = canvas.toDataURL();
 
-        resolve({ pixelData: pixels, thumbnail });
+        resolve({ pixelData: pixels, thumbnail, gridW, gridH });
       } catch (e) {
         reject(e);
       }

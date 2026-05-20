@@ -1,17 +1,18 @@
-export function buildSVG(pixelData, gridSize, outputSize, outlineEnabled, outlineColor, outlineThickness) {
-  const cell = outputSize / gridSize;
+export function buildSVG(pixelData, gridW, gridH, outputSize, outlineEnabled, outlineColor, outlineThickness) {
+  const cell = outputSize / Math.max(gridW, gridH);
   const pad = outlineEnabled ? cell * outlineThickness : 0;
-  const total = outputSize + pad * 2;
+  const svgW = cell * gridW + pad * 2;
+  const svgH = cell * gridH + pad * 2;
 
   // Guard: pixelData must cover the full grid — bail with empty SVG if mismatched
-  if (!pixelData || pixelData.length < gridSize * gridSize) {
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + total.toFixed(2) + '" height="' + total.toFixed(2) + '" viewBox="0 0 ' + total.toFixed(2) + ' ' + total.toFixed(2) + '" shape-rendering="crispEdges"></svg>';
+  if (!pixelData || pixelData.length < gridW * gridH) {
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + svgW.toFixed(2) + '" height="' + svgH.toFixed(2) + '" viewBox="0 0 ' + svgW.toFixed(2) + ' ' + svgH.toFixed(2) + '" shape-rendering="crispEdges"></svg>';
   }
 
   let rects = '';
-  for (let y = 0; y < gridSize; y++) {
-    for (let x = 0; x < gridSize; x++) {
-      const { r, g, b, a } = pixelData[y * gridSize + x];
+  for (let y = 0; y < gridH; y++) {
+    for (let x = 0; x < gridW; x++) {
+      const { r, g, b, a } = pixelData[y * gridW + x];
       if (a < 5) continue;
       const opacity = a < 250 ? ' opacity="' + (a / 255).toFixed(3) + '"' : '';
       rects += '<rect x="' + (pad + x * cell).toFixed(2) + '" y="' + (pad + y * cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '" fill="rgb(' + r + ',' + g + ',' + b + ')"' + opacity + '/>';
@@ -20,11 +21,11 @@ export function buildSVG(pixelData, gridSize, outputSize, outlineEnabled, outlin
 
   let outline = '';
   if (outlineEnabled) {
-    const isOpaque = (x, y) => x >= 0 && y >= 0 && x < gridSize && y < gridSize && pixelData[y * gridSize + x].a >= 5;
+    const isOpaque = (x, y) => x >= 0 && y >= 0 && x < gridW && y < gridH && pixelData[y * gridW + x].a >= 5;
     const bt = cell * outlineThickness;
 
-    for (let y = 0; y < gridSize; y++) {
-      for (let x = 0; x < gridSize; x++) {
+    for (let y = 0; y < gridH; y++) {
+      for (let x = 0; x < gridW; x++) {
         if (!isOpaque(x, y)) continue;
         const px = pad + x * cell;
         const py = pad + y * cell;
@@ -42,7 +43,7 @@ export function buildSVG(pixelData, gridSize, outputSize, outlineEnabled, outlin
     }
   }
 
-  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + total.toFixed(2) + '" height="' + total.toFixed(2) + '" viewBox="0 0 ' + total.toFixed(2) + ' ' + total.toFixed(2) + '" shape-rendering="crispEdges">' + outline + rects + '</svg>';
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="' + svgW.toFixed(2) + '" height="' + svgH.toFixed(2) + '" viewBox="0 0 ' + svgW.toFixed(2) + ' ' + svgH.toFixed(2) + '" shape-rendering="crispEdges">' + outline + rects + '</svg>';
 }
 
 export function extractPalette(pixelData) {

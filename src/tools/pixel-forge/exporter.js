@@ -29,13 +29,14 @@ export class ExportManager {
       sorted.forEach(size => {
         const svgContent = buildSVG(
           f.pixelData,
-          gridSize,
+          f.gridW,
+          f.gridH,
           size,
           outlineEnabled,
           outlineColor,
           outlineThickness
         );
-        folder.file(`${base}-${size}x${size}-${gridSize}grid.svg`, svgContent);
+        folder.file(`${base}-${size}px-${gridSize}grid.svg`, svgContent);
       });
     });
 
