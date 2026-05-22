@@ -3,12 +3,16 @@
 // To add Mixpanel: implement the three functions below using mixpanel-browser,
 // keeping all call sites in main.js unchanged.
 
+import { inject } from '@vercel/analytics';
+
 const IS_DEV = import.meta.env.DEV;
 
 let _anonymousId = null;
 let _sessionId = null;
 
 export function initAnalytics() {
+  inject(); // activates Vercel Analytics page view tracking
+
   _anonymousId = _getOrCreateId('pf_anonymous_id');
   _sessionId = crypto.randomUUID();
 
