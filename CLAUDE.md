@@ -1,7 +1,7 @@
 # Graphic Toolkit
 
 ## What This Is
-A multi-tool web app for designers — each tool is a separate page under one roof. Tool #1: Pixel Forge (SVG pixel icon generator from raster images).
+A multi-tool web app for designers — each tool is a separate page under one roof. Tool #1: Pixel Forge — batch SVG asset generator: converts multiple images into consistent SVG sets across multiple sizes in one ZIP export.
 
 ## Tech Stack & Why
 | Layer | Choice | Reason |
@@ -17,6 +17,10 @@ A multi-tool web app for designers — each tool is a separate page under one ro
 ```
 graphic-toolkit/
 ├── index.html                  ← Hub / landing page (tool cards)
+├── _diary/                     ← Vibe coding journey diary (raw dev log per tool)
+│   └── pixel-forge.md
+├── docs/
+│   └── PRD.md
 ├── tools/
 │   └── pixel-forge/
 │       └── index.html          ← Pixel Forge tool page
@@ -28,13 +32,19 @@ graphic-toolkit/
 │       └── pixel-forge/
 │           ├── main.js         ← Entry point, wires modules
 │           ├── upload.js       ← File input, drag/drop, file list UI
-│           ├── processor.js    ← Contrast, quantize, bg removal
-│           ├── svgBuilder.js   ← buildSVG(), outline renderer
+│           ├── processor.js    ← Contrast, quantize, bg removal (shared pipeline)
+│           ├── svgBuilder.js   ← Pixel art SVG builder
+│           ├── halftone.js     ← Halftone SVG builder
+│           ├── pointillism.js  ← Pointillism SVG builder
+│           ├── ascii.js        ← ASCII art SVG builder
 │           ├── preview.js      ← Preview tabs, palette display
 │           └── exporter.js     ← ZIP generation + download
 ├── vite.config.js              ← Multi-page app config
 └── package.json
 ```
+
+### `_diary/` convention
+Each tool gets a `_diary/{tool-name}.md` — a running raw log of decisions, bugs, pivots, and learnings. Not polished. Not the PRD. Source material for case studies and articles.
 
 ### Adding a new tool
 ```
@@ -63,8 +73,9 @@ npm run preview # preview production build
 
 ## References
 - PRD: `docs/PRD.md`
+- Dev diary: `_diary/pixel-forge.md`
 - Session logs: `../../../_logs/LOG_YYYY-MM-DD.md`
-- Extraction notes: `docs/EXTRACTION_SUMMARY.md`
+- Journey (vault): `Ralphenamenon/pages/W_PF_Pixel Forge Journey.md`
 
 ---
-**Last Updated:** 2026-05-19
+**Last Updated:** 2026-05-22

@@ -1,10 +1,11 @@
 # Pixel Forge — Product Requirements Document
 
-**Version:** 1.2
+**Version:** 1.3
 **Status:** In Progress
 **Last Updated:** May 2026
 
 ## Update Log
+- 2026-05-22 — v1.3: Competitive analysis updated after researching brik.space, tooooools.app (added to matrix). v2.0 effects (halftone, pointillism, ASCII) shipped — moved out of Out of Scope. Positioning refined: primary differentiator is **batch SVG workflow** (multi-file × multi-size → ZIP), not SVG output alone. More effects will be added over time like tooooools.app, but the batch-to-SVG pipeline is the core moat.
 - 2026-05-20 — v1.2: Competitive analysis completed — added Section 1.4 Competitive Positioning. SVG output identified as primary moat vs effect.app (video/animation), Canva (raster templates), and Figma (no raster-to-effect conversion). Target audience refined: graphic designers and design system designers, not content creators.
 - 2026-05-20 — v1.1: Product pivot — expand from icon generator to multi-effect image processing tool. Icon set becomes one mode inside. Default output switches to aspect ratio preservation. Bug found: non-square images distorted to square silently. Halftone/dot/ASCII planned for v2.0.
 - 2026-05-10 — v1.0: Initial PRD created
@@ -38,26 +39,30 @@ Designers who want to apply consistent visual effects to images for graphic desi
 
 ---
 
-### 1.4 Competitive Positioning *(added v1.2)*
+### 1.4 Competitive Positioning *(updated v1.3)*
 
-**Primary moat: SVG output.**
-No mainstream tool converts raster images into production-ready SVG assets with artistic effects applied. Effect.app outputs MP4/PNG (video-first, content creators). Canva outputs PNG/PDF (template-based, raster). Figma is a vector editor but cannot convert raster → stylized SVG. This combination — raster input + artistic effect + scalable SVG output — is the gap Pixel Forge owns.
+**Primary moat: batch SVG workflow.**
+The combination of multi-file input × artistic effect × multi-size output × single ZIP delivery is unique. No other browser tool produces a consistent set of SVG assets across all files and sizes in one operation. This is a production workflow for designers building asset libraries — not a single-image effect tool.
 
-**Secondary moat: designer workflow.**
-Output opens natively in Figma, VS Code, and any browser without conversion. SVG files drop directly into codebases and design systems. No re-export, no format friction.
+**Secondary moat: SVG output.**
+All three closest competitors (brik.space, effect.app, tooooools.app) output raster or video only. SVG output means files open natively in Figma, VS Code, and browsers — no conversion needed.
 
 **Tertiary moat: client-side privacy.**
-All processing runs in the browser. No image data is uploaded to any server. Designers working with NDA-protected assets (unreleased branding, client work) can use the tool without legal risk.
+All processing runs in the browser. No image data is uploaded to any server. Designers working with NDA-protected assets can use the tool without legal risk.
 
-| Competitor | Category | Output | Why not a threat |
-|---|---|---|---|
-| effect.app | Animated effects / content creators | MP4, WebM, PNG | Video-first, no SVG, different audience |
-| Canva | Template-based design | PNG, PDF | No effect conversion pipeline, raster only |
-| Figma | Vector editor | SVG | Cannot convert raster → stylized SVG |
-| Photoshop | Raster editor | PSD, PNG | Desktop + subscription, no SVG output |
-| Aseprite | Manual pixel art | PNG, GIF | Manual drawing only, no photo conversion |
+**Effects strategy:** Pixel Forge will continue adding effects over time (the effect library is not a finished feature — it grows). But effects are a means to an end. The defensible position is the batch-to-SVG pipeline, not the number of effects. tooooools.app proves that free effects tools exist and improve. Trying to out-effect them is the wrong race.
 
-**Positioning statement:** The only browser tool that converts photos and illustrations into production-ready SVG graphic assets with artistic effects — built for designers, not content creators.
+| Competitor | Category | Output | SVG? | Batch multi-size? | Key difference |
+|---|---|---|---|---|---|
+| **tooooools.app** | Image/video effects | JPG, PNG, MP4 | ❌ | ❌ | 20+ effects, free — closest in effect space, no batch SVG |
+| **effect.app** | Image/video effects | PNG, JPEG, MP4/WebM | ❌ | ❌ | $12–20/mo, content creators, video-first |
+| **brik.space** | AI motion tool builder | Still/video/HTML embed | ❌ | ❌ | AI-generated parameterized motion systems, brand/agency focus — different product |
+| Canva | Template-based design | PNG, PDF | ❌ | ❌ | No effect conversion pipeline |
+| Figma | Vector editor | SVG | ✓ | ❌ | Cannot convert raster → stylized SVG |
+| Photoshop | Raster editor | PSD, PNG | ❌ | ❌ | Desktop + subscription |
+| Aseprite | Manual pixel art | PNG, GIF | ❌ | ❌ | Manual drawing only |
+
+**Positioning statement:** The only browser tool that converts images into consistent SVG asset sets — multiple files, multiple sizes, production-ready in one ZIP. Built for designers building asset libraries, not for single-image content creation.
 
 ---
 
@@ -174,9 +179,8 @@ All processing runs in the browser. No image data is uploaded to any server. Des
 
 ---
 
-## 5. Out of Scope (v1.1)
+## 5. Out of Scope (v2.0)
 
-- Additional effect modes beyond pixel art (halftone, dot, ASCII) — planned v2.0
 - Custom color palette input
 - Dithering algorithms (Floyd-Steinberg, ordered)
 - Animation / GIF export
@@ -188,13 +192,15 @@ All processing runs in the browser. No image data is uploaded to any server. Des
 
 ---
 
-## 6. Future Considerations (v2.0+)
+## 6. Future Considerations (v3.0+)
 
-- **Halftone effect** — convert image to halftone dot pattern, configurable dot size and angle
-- **Dot/Pointillism effect** — render image as colored dots, configurable density
-- **ASCII art effect** — render image as ASCII characters, configurable charset and size
+- **More effects** — ongoing expansion; effects grow over time like tooooools.app. Each effect uses the shared pixelData pipeline (zero dependency cost).
+  - Dithering (Floyd-Steinberg, ordered)
+  - Edge detection / linework
+  - Stippling / dot patterns
+  - Glitch / pixel shift
 - **Multi-effect pipeline** — apply multiple effects in sequence
-- **Tool rename** — rename from "Pixel Forge" to reflect multi-effect scope (decide after v2.0 effects confirmed)
+- **Tool rename** — "Pixel Forge" works for now; revisit when effect count is significant
 - **Per-image settings override** — allow grid size / contrast / palette to differ per file
 - **Custom palette editor** — fixed palette (Game Boy, CGA, NES) remapped to all images
 - **SVG path output** — trace pixel clusters into `<path>` shapes for smaller file sizes

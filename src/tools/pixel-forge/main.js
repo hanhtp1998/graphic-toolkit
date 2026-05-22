@@ -3,6 +3,9 @@ import { UploadManager } from './upload.js';
 import { PreviewManager } from './preview.js';
 import { ExportManager } from './exporter.js';
 import { RAMPS } from './ascii.js';
+import { initAnalytics, trackEffectSelected, trackExportCompleted, trackExportFailed } from '../../analytics.js';
+
+initAnalytics();
 
 const SIZES = [16, 24, 32, 48, 64, 96, 128, 256, 512];
 let selectedSizes = new Set([32, 64, 128]);
@@ -139,6 +142,7 @@ function getEffectGridSize() {
 }
 
 function switchEffect(effect) {
+  trackEffectSelected(effect, activeEffect);
   activeEffect = effect;
   previewManager.activeEffect = effect;
   previewManager.effectSettings = effectSettings[effect] || {};
@@ -198,16 +202,30 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
   previewManager.outlineColor = outlineColorPicker.value;
   previewManager.outlineThickness = parseInt(outlineThicknessSlider.value);
 
-  await exportManager.exportZip(
-    uploadManager.files,
-    getEffectGridSize(),
-    selectedSizes,
-    outlineCheckbox.checked,
-    outlineColorPicker.value,
-    parseInt(outlineThicknessSlider.value),
-    activeEffect,
-    effectSettings[activeEffect] || {}
-  );
+  const t0 = Date.now();
+  const readyCount = uploadManager.getReadyFiles().length;
+
+  try {
+    await exportManager.exportZip(
+      uploadManager.files,
+      getEffectGridSize(),
+      selectedSizes,
+      outlineCheckbox.checked,
+      outlineColorPicker.value,
+      parseInt(outlineThicknessSlider.value),
+      activeEffect,
+      effectSettings[activeEffect] || {}
+    );
+    trackExportCompleted({
+      effectType: activeEffect,
+      gridSize: getEffectGridSize(),
+      fileCount: readyCount,
+      sizeCount: selectedSizes.size,
+      durationMs: Date.now() - t0,
+    });
+  } catch (e) {
+    trackExportFailed(e.message);
+  }
 });
 
 document.getElementById('clearBtn').addEventListener('click', () => {
